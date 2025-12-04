@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b84jhy0u4g6vs"]
+
+[ext_resource type="Script" uid="uid://dowf5iwurlpay" path="res://scenes/hand.gd" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://dn7073m2ma62o" path="res://scenes/game.gd" id="1_yqjtg"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_yqjtg")
+
+[node name="Hand" type="Node2D" parent="."]
+script = ExtResource("1_uwrxv")
