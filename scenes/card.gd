@@ -18,9 +18,10 @@ func _process(delta: float) -> void:
 	pass
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventScreenDrag and touching:
-		position = get_global_mouse_position()
-		get_parent().move_child(self, -1)
+	#if event is InputEventScreenDrag and touching:
+	#	global_position = get_global_mouse_position()
+	#	get_parent().move_child(self, -1)
+	pass
 
 func _on_card_area_mouse_entered() -> void:
 	touching = true

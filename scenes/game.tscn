@@ -1,10 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://b84jhy0u4g6vs"]
+[gd_scene load_steps=6 format=3 uid="uid://b84jhy0u4g6vs"]
 
 [ext_resource type="Script" uid="uid://dowf5iwurlpay" path="res://scenes/hand.gd" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://dn7073m2ma62o" path="res://scenes/game.gd" id="1_yqjtg"]
+
+[sub_resource type="Curve" id="Curve_yqjtg"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 2.0, 0, 1, Vector2(1, 1), 2.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_lnu2h"]
+_data = [Vector2(0, 1), 0.0, -2.02734, 0, 1, Vector2(0.503704, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.01493, 0.0, 1, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_lbhrr"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 1.98922, 0, 1, Vector2(0.501235, -0.00293505), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.01083, 0.0, 1, 0]
+point_count = 3
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_yqjtg")
 
 [node name="Hand" type="Node2D" parent="."]
+position = Vector2(640, 360)
 script = ExtResource("1_uwrxv")
+spread_curve = SubResource("Curve_yqjtg")
+height_curve = SubResource("Curve_lnu2h")
+rotation_curve = SubResource("Curve_lbhrr")
+
+[node name="AddCardButton" type="Button" parent="."]
+offset_left = 59.0
+offset_top = 23.0
+offset_right = 247.0
+offset_bottom = 149.0
+text = "add card"
+
+[node name="RemoveCardButton" type="Button" parent="."]
+offset_left = 1025.0
+offset_top = 23.0
+offset_right = 1213.0
+offset_bottom = 149.0
+text = "remove card"
+
+[connection signal="pressed" from="AddCardButton" to="Hand" method="_on_add_card_button_pressed"]
+[connection signal="pressed" from="RemoveCardButton" to="Hand" method="_on_remove_card_button_pressed"]

@@ -21,5 +21,4 @@ enum CardSuit {
 	CLUBS,
 	HEARTS,
 	SPADES,
-	
 }
