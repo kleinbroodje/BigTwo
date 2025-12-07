@@ -11,19 +11,21 @@ config_version=5
 [application]
 
 config/name="bigtwo"
-run/main_scene="uid://b84jhy0u4g6vs"
+run/main_scene="uid://dligp8huc1h18"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="uid://bs0h1d08jo7go"
 
 [autoload]
 
 CardDefs="*res://global/card_defs.gd"
+NetworkHandler="*res://global/network_handler.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
+window/handheld/orientation=4
 
 [dotnet]
 

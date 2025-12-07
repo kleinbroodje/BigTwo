@@ -11,31 +11,32 @@ position = Vector2(640, 600)
 script = ExtResource("1_uwrxv")
 
 [node name="AddCardButton" type="Button" parent="."]
-offset_left = 59.0
-offset_top = 23.0
-offset_right = 247.0
-offset_bottom = 149.0
-text = "add card"
+offset_left = 1100.0
+offset_top = 15.0
+offset_right = 1250.0
+offset_bottom = 85.0
+text = "Add Card"
 
 [node name="RemoveCardButton" type="Button" parent="."]
-offset_left = 1025.0
-offset_top = 23.0
-offset_right = 1213.0
-offset_bottom = 149.0
-text = "remove card"
+offset_left = 930.0
+offset_top = 15.0
+offset_right = 1080.0
+offset_bottom = 85.0
+text = "Remove Card
+"
 
 [node name="PlayCardsButton" type="Button" parent="."]
-offset_left = 384.0
-offset_top = 625.0
-offset_right = 538.0
-offset_bottom = 699.0
+offset_left = 590.0
+offset_top = 15.0
+offset_right = 740.0
+offset_bottom = 85.0
 text = "Play Hand"
 
 [node name="VsyncToggle" type="Button" parent="."]
-offset_left = 755.0
-offset_top = 23.0
-offset_right = 953.0
-offset_bottom = 147.0
+offset_left = 760.0
+offset_top = 15.0
+offset_right = 910.0
+offset_bottom = 85.0
 toggle_mode = true
 text = "Vsync: On"
 

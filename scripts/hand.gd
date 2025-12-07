@@ -15,9 +15,6 @@ var tween_position: Tween
 var dragged_card: Node2D
 var selected_cards: Array = []
 
-func _ready() -> void:
-	pass
-	
 func _process(delta: float) -> void:
 	if dragged_card:
 		dragged_card.global_position = get_global_mouse_position()
@@ -84,4 +81,14 @@ func _on_add_card_button_pressed() -> void:
 	new_card.card_released.connect(_on_card_released)
 	new_card.card_dragged.connect(_on_card_dragged)
 	add_child(new_card)
+	update_hand_positions()
+	
+func deal_cards() -> void:
+	for i in range(13):
+		var new_card = CARD_SCENE.instantiate()
+		new_card.suit = CardDefs.CardSuit.SPADES
+		new_card.value = CardDefs.CardValue.TWO
+		new_card.card_released.connect(_on_card_released)
+		new_card.card_dragged.connect(_on_card_dragged)
+		add_child(new_card)
 	update_hand_positions()
