@@ -17,8 +17,13 @@ config/icon="uid://bs0h1d08jo7go"
 
 [autoload]
 
-CardDefs="*res://global/card_defs.gd"
-NetworkHandler="*res://global/network_handler.gd"
+CardDefs="*res://globals/card_defs.gd"
+NetworkHandler="*res://globals/network_handler.gd"
+Overlays="*res://globals/overlays.tscn"
+
+[debug]
+
+gdscript/warnings/untyped_declaration=2
 
 [display]
 

@@ -1,13 +1,17 @@
 extends Node2D
+class_name Card
 
 signal card_dragged
 signal card_released
 
+const CARD_SCENE_PATH := "res://scenes/card.tscn"
+const CARD_SCENE := preload(CARD_SCENE_PATH)
+
 @export var value: CardDefs.CardValue
 @export var suit: CardDefs.CardSuit
 
-@onready var card_image: Sprite2D = $CardImage
-@onready var click_timer: Timer = $ClickTimer
+@onready var card_image: Sprite2D = get_node("CardImage")
+@onready var click_timer: Timer = get_node("ClickTimer")
 
 var suit_names: Array = ["diamonds", "clubs", "hearts", "spades"]
 var value_names: Array = ["03", "04", "05", "06", "07", "08", "09", 
@@ -18,6 +22,19 @@ var selected: bool = false
 var dragged: bool = false
 var click_time: float = 0.1
 var tween_position: Tween
+
+static func new_card(
+	value: CardDefs.CardValue, 
+	suit: CardDefs.CardSuit, 
+	on_card_dragged: Callable, 
+	on_card_released: Callable
+) -> Card:
+	var new_card := CARD_SCENE.instantiate()
+	new_card.suit = CardDefs.CardSuit.SPADES
+	new_card.value = CardDefs.CardValue.TWO
+	new_card.card_dragged.connect(on_card_dragged)
+	new_card.card_released.connect(on_card_released)
+	return new_card
 
 func _ready() -> void:
 	card_image.texture = load("res://assets/images/cards/%s_%s.png" % [suit_names[suit], value_names[value]])
@@ -36,13 +53,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		card_released.emit(self)
 		
 func _on_card_area_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.is_pressed():
-			pressed = true
-			click_timer.start(click_time)
+	if event is InputEventMouseButton and event.is_pressed():
+		pressed = true
+		click_timer.start(click_time)
 			
 func move(pos: Vector2) -> void:
 	if tween_position and tween_position.is_running():
 		tween_position.kill()
 	tween_position = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
 	tween_position.tween_property(self, "global_position", pos, 0.5)
+	
+func toggle_selected() -> void:
+	selected = !selected
+		

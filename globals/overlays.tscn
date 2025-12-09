@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://v7j3ibgdeb5v"]
+
+[ext_resource type="Script" uid="uid://bg6fdkbj8nis4" path="res://globals/overlays.gd" id="1_32gy1"]
+
+[node name="Overlays" type="CanvasLayer"]
+script = ExtResource("1_32gy1")
+
+[node name="FPS" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0

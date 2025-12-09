@@ -1,4 +1,5 @@
 extends Control
+class_name MainMenu
 
 func _on_host_game_button_pressed() -> void:
 	NetworkHandler.start_server()

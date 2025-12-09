@@ -1,4 +1,5 @@
 extends Node
+class_name Game
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -8,7 +9,7 @@ func _ready() -> void:
 func _on_vsync_toggle_toggled(toggled_off: bool) -> void:
 	if toggled_off:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-		$VsyncToggle.text = "Vsync: Off"
+		get_node("VsyncToggle").text = "Vsync: Off"
 	else:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
-		$VsyncToggle.text = "Vsync: On"
+		get_node("VsyncToggle").text = "Vsync: On"
