@@ -20,8 +20,12 @@ func start_client() -> void:
 	multiplayer.multiplayer_peer = peer
 
 func _on_peer_connected(id: int) -> void:
-	print("Player %d joined" % id)
+	rpc("add_new_player", id)
 	
 func _on_peer_disconnected(id: int) -> void:
 	print("Player %d left" % id)
+	
+@rpc
+func add_new_player(player_id: int) -> void:
+	print("Player %d joined" % player_id)
 	

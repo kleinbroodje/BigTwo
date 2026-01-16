@@ -12,9 +12,9 @@ const HAND_OFFSET_Y := 100
 
 var tween_position: Tween
 var dragged_card: Card
-var selected_cards: Array = []
+var selected_cards: Array[Card] = []
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if dragged_card:
 		update_dragging()
 						
@@ -24,12 +24,12 @@ func update_hand_positions() -> void:
 		
 		#calculate x position
 		var cards_width := CARD_SPACING_X * get_child_count()
-		var card_spacing_x_offset := 0
+		var card_spacing_x_offset := 0.0
 		if cards_width > HAND_WIDTH:
-			card_spacing_x_offset = (HAND_WIDTH - CARD_SPACING_X * get_child_count()) / (get_child_count() - 1)
+			card_spacing_x_offset = (HAND_WIDTH - CARD_SPACING_X * get_child_count()) / float(get_child_count() - 1)
 			cards_width = HAND_WIDTH
 		var final_card_spacing_x := CARD_SPACING_X + card_spacing_x_offset
-		var x_pos := global_position.x + (idx-float(get_child_count())/2+0.5) * final_card_spacing_x
+		var x_pos := global_position.x + (idx - float(get_child_count()) / 2 + 0.5) * final_card_spacing_x
 			
 		#calculate y position and rotation
 		#var hand_ratio = float(idx)/float(get_child_count() - 1) #give number between 0-1 depending on index
@@ -45,7 +45,7 @@ func update_hand_positions() -> void:
 func update_dragging() -> void:
 	dragged_card.global_position = get_global_mouse_position()
 	var idx := dragged_card.get_index()
-	if idx != get_child_count()-1 and dragged_card.global_position.x > get_child(idx + 1).global_position.x:
+	if idx != get_child_count() - 1 and dragged_card.global_position.x > get_child(idx + 1).global_position.x:
 		move_child(dragged_card, idx + 1)
 	elif idx != 0 and dragged_card.global_position.x < get_child(idx - 1).global_position.x:
 		move_child(dragged_card, idx - 1)
@@ -76,22 +76,22 @@ func _on_remove_card_button_pressed() -> void:
 	update_hand_positions()
 
 func _on_add_card_button_pressed() -> void:
-	var new_card := Card.new_card(
-		CardDefs.CardValue.TWO, 
+	var new_card := Card.create_new_card(
+		CardDefs.CardValue.TWO,
 		CardDefs.CardSuit.SPADES,
-		_on_card_dragged,
-		_on_card_released
 	)
+	new_card.card_dragged.connect(_on_card_dragged)
+	new_card.card_released.connect(_on_card_released)
 	add_child(new_card)
 	update_hand_positions()
 	
 func deal_cards() -> void:
 	for i in range(13):
-		var new_card := Card.new_card(
-			CardDefs.CardValue.TWO, 
+		var new_card := Card.create_new_card(
+			CardDefs.CardValue.TWO,
 			CardDefs.CardSuit.SPADES,
-			_on_card_dragged,
-			_on_card_released
 		)
+		new_card.card_dragged.connect(_on_card_dragged)
+		new_card.card_released.connect(_on_card_released)
 		add_child(new_card)
 	update_hand_positions()

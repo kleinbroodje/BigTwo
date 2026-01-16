@@ -14,7 +14,7 @@ const CARD_SCENE := preload(CARD_SCENE_PATH)
 @onready var click_timer: Timer = get_node("ClickTimer")
 
 var suit_names: Array = ["diamonds", "clubs", "hearts", "spades"]
-var value_names: Array = ["03", "04", "05", "06", "07", "08", "09", 
+var value_names: Array = ["03", "04", "05", "06", "07", "08", "09",
 "10", "jack", "queen", "king", "ace", "02"]
 
 var pressed: bool = false
@@ -23,25 +23,21 @@ var dragged: bool = false
 var click_time: float = 0.1
 var tween_position: Tween
 
-static func new_card(
-	value: CardDefs.CardValue, 
-	suit: CardDefs.CardSuit, 
-	on_card_dragged: Callable, 
-	on_card_released: Callable
+static func create_new_card(
+	v: CardDefs.CardValue,
+	s: CardDefs.CardSuit,
 ) -> Card:
-	var new_card := CARD_SCENE.instantiate()
-	new_card.suit = CardDefs.CardSuit.SPADES
-	new_card.value = CardDefs.CardValue.TWO
-	new_card.card_dragged.connect(on_card_dragged)
-	new_card.card_released.connect(on_card_released)
-	return new_card
+	var card := CARD_SCENE.instantiate()
+	card.suit = s
+	card.value = v
+	return card
 
 func _ready() -> void:
 	card_image.texture = load("res://assets/images/cards/%s_%s.png" % [suit_names[suit], value_names[value]])
 	click_timer.one_shot = true
 	
-func _process(delta: float) -> void:
-	if not dragged and pressed and 	click_timer.time_left == 0:
+func _process(_delta: float) -> void:
+	if not dragged and pressed and click_timer.time_left == 0:
 		dragged = true
 		card_dragged.emit(self)
 	elif dragged and not pressed:
@@ -52,7 +48,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		pressed = false
 		card_released.emit(self)
 		
-func _on_card_area_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_card_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
 		pressed = true
 		click_timer.start(click_time)
@@ -65,4 +61,3 @@ func move(pos: Vector2) -> void:
 	
 func toggle_selected() -> void:
 	selected = !selected
-		

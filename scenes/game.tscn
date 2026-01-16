@@ -40,6 +40,17 @@ offset_bottom = 85.0
 toggle_mode = true
 text = "Vsync: On"
 
+[node name="PlayingField" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
 [connection signal="pressed" from="AddCardButton" to="Hand" method="_on_add_card_button_pressed"]
 [connection signal="pressed" from="RemoveCardButton" to="Hand" method="_on_remove_card_button_pressed"]
+[connection signal="pressed" from="PlayCardsButton" to="." method="_on_play_cards_button_pressed"]
 [connection signal="toggled" from="VsyncToggle" to="." method="_on_vsync_toggle_toggled"]

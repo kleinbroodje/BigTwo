@@ -12,7 +12,7 @@ config_version=5
 
 config/name="bigtwo"
 run/main_scene="uid://dligp8huc1h18"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 config/icon="uid://bs0h1d08jo7go"
 
 [autoload]
