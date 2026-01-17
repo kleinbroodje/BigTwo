@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://b84jhy0u4g6vs"]
+[gd_scene load_steps=5 format=3 uid="uid://b84jhy0u4g6vs"]
 
 [ext_resource type="Script" uid="uid://dowf5iwurlpay" path="res://scripts/hand.gd" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://dn7073m2ma62o" path="res://scripts/game.gd" id="1_yqjtg"]
+[ext_resource type="Script" uid="uid://bgimvf0y2mco8" path="res://scripts/playing_field.gd" id="3_lbhrr"]
+[ext_resource type="Script" path="res://scripts/game_ui.gd" id="3_lnu2h"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_yqjtg")
@@ -9,36 +11,6 @@ script = ExtResource("1_yqjtg")
 [node name="Hand" type="Node2D" parent="."]
 position = Vector2(640, 600)
 script = ExtResource("1_uwrxv")
-
-[node name="AddCardButton" type="Button" parent="."]
-offset_left = 1100.0
-offset_top = 15.0
-offset_right = 1250.0
-offset_bottom = 85.0
-text = "Add Card"
-
-[node name="RemoveCardButton" type="Button" parent="."]
-offset_left = 930.0
-offset_top = 15.0
-offset_right = 1080.0
-offset_bottom = 85.0
-text = "Remove Card
-"
-
-[node name="PlayCardsButton" type="Button" parent="."]
-offset_left = 590.0
-offset_top = 15.0
-offset_right = 740.0
-offset_bottom = 85.0
-text = "Play Hand"
-
-[node name="VsyncToggle" type="Button" parent="."]
-offset_left = 760.0
-offset_top = 15.0
-offset_right = 910.0
-offset_bottom = 85.0
-toggle_mode = true
-text = "Vsync: On"
 
 [node name="PlayingField" type="Control" parent="."]
 layout_mode = 3
@@ -49,8 +21,51 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_lbhrr")
 
-[connection signal="pressed" from="AddCardButton" to="Hand" method="_on_add_card_button_pressed"]
-[connection signal="pressed" from="RemoveCardButton" to="Hand" method="_on_remove_card_button_pressed"]
-[connection signal="pressed" from="PlayCardsButton" to="." method="_on_play_cards_button_pressed"]
-[connection signal="toggled" from="VsyncToggle" to="." method="_on_vsync_toggle_toggled"]
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_lnu2h")
+
+[node name="AddCardButton" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 15.0
+offset_right = 1250.0
+offset_bottom = 85.0
+text = "Add Card"
+
+[node name="RemoveCardButton" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 930.0
+offset_top = 15.0
+offset_right = 1080.0
+offset_bottom = 85.0
+text = "Remove Card
+"
+
+[node name="PlayCardsButton" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 590.0
+offset_top = 15.0
+offset_right = 740.0
+offset_bottom = 85.0
+text = "Play Hand"
+
+[node name="VsyncToggle" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 760.0
+offset_top = 15.0
+offset_right = 910.0
+offset_bottom = 85.0
+toggle_mode = true
+text = "Vsync: On"
+
+[connection signal="cards_played" from="Hand" to="PlayingField" method="_on_hand_cards_played"]
+[connection signal="pressed" from="UI/AddCardButton" to="Hand" method="_on_add_card_button_pressed"]
+[connection signal="pressed" from="UI/RemoveCardButton" to="Hand" method="_on_remove_card_button_pressed"]
+[connection signal="pressed" from="UI/PlayCardsButton" to="Hand" method="_on_play_cards_button_pressed"]
+[connection signal="toggled" from="UI/VsyncToggle" to="UI" method="_on_vsync_toggle_toggled"]

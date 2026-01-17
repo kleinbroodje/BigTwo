@@ -1,6 +1,8 @@
 extends Node2D
 class_name Hand
 
+signal cards_played
+
 const CARD_SPACING_X := 120
 const HAND_WIDTH := 1200
 const CARD_SPACING_Y := 10
@@ -70,28 +72,35 @@ func _on_card_released(card: Card) -> void:
 func _on_card_dragged(card: Card) -> void:
 	dragged_card = card
 
-func _on_remove_card_button_pressed() -> void:
-	var child := get_child(0)
-	remove_child(child)
-	update_hand_positions()
-
 func _on_add_card_button_pressed() -> void:
-	var new_card := Card.create_new_card(
-		CardDefs.CardValue.TWO,
-		CardDefs.CardSuit.SPADES,
+	var new_card := Card.new_card(
+	CardDefs.CardValue.TWO,
+	CardDefs.CardSuit.SPADES,
 	)
 	new_card.card_dragged.connect(_on_card_dragged)
 	new_card.card_released.connect(_on_card_released)
 	add_child(new_card)
 	update_hand_positions()
-	
-func deal_cards() -> void:
-	for i in range(13):
-		var new_card := Card.create_new_card(
-			CardDefs.CardValue.TWO,
-			CardDefs.CardSuit.SPADES,
-		)
-		new_card.card_dragged.connect(_on_card_dragged)
-		new_card.card_released.connect(_on_card_released)
-		add_child(new_card)
+
+func _on_remove_card_button_pressed() -> void:
+	var child := get_child(0)
+	remove_child(child)
 	update_hand_positions()
+	
+func _on_play_cards_button_pressed() -> void:
+	var selected_cards_data: Array[Dictionary] = []
+	for card in selected_cards:
+		selected_cards_data.append(Card.card_to_dict(card))
+		remove_child(card)
+	selected_cards.clear()
+	update_hand_positions()
+	rpc("play_cards", multiplayer.get_unique_id(), selected_cards_data)
+	
+@rpc("any_peer", "call_local")
+func play_cards(player_id: int, cards_data: Array[Dictionary]) -> void:
+	var played_cards: Array[Card] = []
+	for card_data in cards_data:
+		var new_card := Card.dict_to_card(card_data)
+		played_cards.append(new_card)
+	emit_signal("cards_played", played_cards)
+	print(player_id, cards_data)

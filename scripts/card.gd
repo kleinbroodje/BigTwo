@@ -6,6 +6,9 @@ signal card_released
 
 const CARD_SCENE_PATH := "res://scenes/card.tscn"
 const CARD_SCENE := preload(CARD_SCENE_PATH)
+const suit_names: Array = ["diamonds", "clubs", "hearts", "spades"]
+const value_names: Array = ["03", "04", "05", "06", "07", "08", "09",
+"10", "jack", "queen", "king", "ace", "02"]
 
 @export var value: CardDefs.CardValue
 @export var suit: CardDefs.CardSuit
@@ -13,23 +16,29 @@ const CARD_SCENE := preload(CARD_SCENE_PATH)
 @onready var card_image: Sprite2D = get_node("CardImage")
 @onready var click_timer: Timer = get_node("ClickTimer")
 
-var suit_names: Array = ["diamonds", "clubs", "hearts", "spades"]
-var value_names: Array = ["03", "04", "05", "06", "07", "08", "09",
-"10", "jack", "queen", "king", "ace", "02"]
-
 var pressed: bool = false
 var selected: bool = false
 var dragged: bool = false
 var click_time: float = 0.1
 var tween_position: Tween
 
-static func create_new_card(
+static func new_card(
 	v: CardDefs.CardValue,
 	s: CardDefs.CardSuit,
 ) -> Card:
 	var card := CARD_SCENE.instantiate()
-	card.suit = s
 	card.value = v
+	card.suit = s
+	return card
+	
+static func card_to_dict(card: Card) -> Dictionary:
+	return {"value": card.value, "suit": card.suit}
+
+static func dict_to_card(dict: Dictionary) -> Card:
+	var card := Card.new_card(
+		dict["value"],
+		dict["suit"]
+	)
 	return card
 
 func _ready() -> void:
