@@ -6,9 +6,29 @@ signal card_released
 
 const CARD_SCENE_PATH := "res://scenes/card.tscn"
 const CARD_SCENE := preload(CARD_SCENE_PATH)
-const suit_names: Array = ["diamonds", "clubs", "hearts", "spades"]
-const value_names: Array = ["03", "04", "05", "06", "07", "08", "09",
-"10", "jack", "queen", "king", "ace", "02"]
+
+const SUIT_NAMES: Array = [
+	"diamonds",
+	"clubs",
+	"hearts",
+	"spades",
+]
+
+const VALUE_NAMES: Array = [
+	"03",
+	"04",
+	"05",
+	"06",
+	"07",
+	"08",
+	"09",
+	"10",
+	"jack",
+	"queen",
+	"king",
+	"ace",
+	"02",
+]
 
 @export var value: CardDefs.CardValue
 @export var suit: CardDefs.CardSuit
@@ -16,11 +36,11 @@ const value_names: Array = ["03", "04", "05", "06", "07", "08", "09",
 @onready var card_image: Sprite2D = get_node("CardImage")
 @onready var click_timer: Timer = get_node("ClickTimer")
 
-var pressed: bool = false
-var selected: bool = false
-var dragged: bool = false
-var click_time: float = 0.1
+var pressed := false
+var dragged := false
+var click_time := 0.1
 var tween_position: Tween
+
 
 static func new_card(
 	v: CardDefs.CardValue,
@@ -31,20 +51,30 @@ static func new_card(
 	card.suit = s
 	return card
 	
+
 static func card_to_dict(card: Card) -> Dictionary:
-	return {"value": card.value, "suit": card.suit}
+	return {
+		"value": card.value,
+		"suit": card.suit,
+	}
+
 
 static func dict_to_card(dict: Dictionary) -> Card:
-	var card := Card.new_card(
+	var card := new_card(
 		dict["value"],
-		dict["suit"]
+		dict["suit"],
 	)
 	return card
 
+
 func _ready() -> void:
-	card_image.texture = load("res://assets/images/cards/%s_%s.png" % [suit_names[suit], value_names[value]])
+	card_image.texture = load(
+		"res://assets/images/cards/%s_%s.png"
+		% [SUIT_NAMES[suit], VALUE_NAMES[value]]
+	)
 	click_timer.one_shot = true
-	
+
+
 func _process(_delta: float) -> void:
 	if not dragged and pressed and click_timer.time_left == 0:
 		dragged = true
@@ -52,21 +82,36 @@ func _process(_delta: float) -> void:
 	elif dragged and not pressed:
 		dragged = false
 
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.is_released() and pressed:
 		pressed = false
 		card_released.emit(self)
-		
-func _on_card_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+
+
+func _on_card_area_input_event(
+	_viewport: Node,
+	event: InputEvent,
+	_shape_idx: int,
+) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
 		pressed = true
 		click_timer.start(click_time)
-			
+
+
 func move(pos: Vector2) -> void:
 	if tween_position and tween_position.is_running():
 		tween_position.kill()
-	tween_position = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
-	tween_position.tween_property(self, "global_position", pos, 0.5)
-	
-func toggle_selected() -> void:
-	selected = !selected
+		
+	tween_position = (
+		create_tween()
+			.set_ease(Tween.EASE_OUT)
+			.set_trans(Tween.TRANS_QUART)
+	)
+
+	tween_position.tween_property(
+		self,
+		"global_position",
+		pos,
+		0.5,
+	)
