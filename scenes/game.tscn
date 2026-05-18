@@ -47,6 +47,5 @@ offset_bottom = 85.0
 toggle_mode = true
 text = "Vsync: On"
 
-[connection signal="cards_played" from="Hand" to="PlayingField" method="_on_hand_cards_played"]
-[connection signal="pressed" from="UI/PlayCardsButton" to="Hand" method="_on_play_cards_button_pressed"]
+[connection signal="cards_played" from="Hand" to="." method="_on_cards_played"]
 [connection signal="toggled" from="UI/VsyncToggle" to="UI" method="_on_vsync_toggle_toggled"]

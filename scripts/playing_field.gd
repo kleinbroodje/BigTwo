@@ -1,6 +1,6 @@
 extends Control
+class_name PlayingField
 
-
-func _on_hand_cards_played(played_cards: Array[Card]) -> void:
-	for card in played_cards:
+func show_cards(cards: Array[Card]) -> void:
+	for card in cards:
 		add_child(card)

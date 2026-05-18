@@ -52,14 +52,25 @@ static func new_card(
 	return card
 	
 
-static func card_to_dict(card: Card) -> Dictionary:
+func to_dict() -> Dictionary:
 	return {
-		"value": card.value,
-		"suit": card.suit,
+		"value": value,
+		"suit": suit,
 	}
+	
+func beats(card: Card) -> bool:
+	if suit < card.suit:
+		return false
+	if value < card.value:
+		return false
+	return true
 
 
-static func dict_to_card(dict: Dictionary) -> Card:
+static func from_dict(dict: Dictionary) -> Card:
+	assert(dict.has("value"), "dict missing key value") 
+	assert(dict.has("suit"), "dict missing key suit") 
+	assert(dict.size() == 2, "dict has incorrect amount of elements")
+		
 	var card := new_card(
 		dict["value"],
 		dict["suit"],

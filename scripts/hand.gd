@@ -3,11 +3,10 @@ class_name Hand
 
 signal cards_played
 
+const MAX_CARDS := 13
 const CARD_SPACING_X := 120
 const HAND_WIDTH := 1200
-const CARD_ROTATION := deg_to_rad(1)
 
-var tween_position: Tween
 var dragged_card: Card
 var selected_cards: Array[Card] = []
 
@@ -18,19 +17,21 @@ func _process(_delta: float) -> void:
 
 
 func update_hand_positions() -> void:
+	# Calculate x spacing between cards
+	var cards_width := CARD_SPACING_X * get_child_count()
+	var card_spacing_x_offset := 0.0
+
+	if cards_width > HAND_WIDTH:
+		card_spacing_x_offset = (HAND_WIDTH - CARD_SPACING_X
+			* get_child_count()) / float(get_child_count() - 1)
+		cards_width = HAND_WIDTH
+
+	var final_card_spacing_x := CARD_SPACING_X + card_spacing_x_offset
+	
+	# Calculate x and y pos per card
 	for idx in range(get_child_count()):
 		var current_card := get_child(idx)
 
-		# Calculate x position
-		var cards_width := CARD_SPACING_X * get_child_count()
-		var card_spacing_x_offset := 0.0
-
-		if cards_width > HAND_WIDTH:
-			card_spacing_x_offset = (HAND_WIDTH - CARD_SPACING_X
-				* get_child_count()) / float(get_child_count() - 1)
-			cards_width = HAND_WIDTH
-
-		var final_card_spacing_x := CARD_SPACING_X + card_spacing_x_offset
 		var x_pos := global_position.x + (idx - float(get_child_count())
 			/ 2 + 0.5) * final_card_spacing_x
 		var y_pos := global_position.y
@@ -80,25 +81,17 @@ func _on_play_cards_button_pressed() -> void:
 	var selected_cards_data: Array[Dictionary] = []
 
 	for card in selected_cards:
-		selected_cards_data.append(Card.card_to_dict(card))
-		remove_child(card)
+		selected_cards_data.append(card.to_dict())
+		card.queue_free()
 
 	selected_cards.clear()
 	update_hand_positions()
 
-	rpc(
-		"play_cards",
-		multiplayer.get_unique_id(),
-		selected_cards_data
-	)
+	cards_played.emit(selected_cards_data)  
 
 
-@rpc("any_peer", "call_local")
-func play_cards(player_id: int, cards_data: Array[Dictionary]) -> void:
-	var played_cards: Array[Card] = []
-
-	for card_data in cards_data:
-		var new_card := Card.dict_to_card(card_data)
-		played_cards.append(new_card)
-
-	emit_signal("cards_played", played_cards)
+func add_card(card_data: Dictionary) -> void:
+	var new_card := Card.from_dict(card_data)
+	new_card.connect("card_dragged", _on_card_dragged)
+	new_card.connect("card_released", _on_card_released)
+	add_child(new_card)
