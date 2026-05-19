@@ -2,6 +2,7 @@ extends Node2D
 class_name Hand
 
 signal cards_played
+signal card_selected
 
 const MAX_CARDS := 13
 const CARD_SPACING_X := 120
@@ -69,6 +70,8 @@ func _on_card_released(card: Card) -> void:
 		else:
 			selected_cards.append(card)
 			
+		card_selected.emit(selected_cards)
+			
 	dragged_card = null
 	update_hand_positions()
 
@@ -78,16 +81,15 @@ func _on_card_dragged(card: Card) -> void:
 
 
 func _on_play_cards_button_pressed() -> void:
-	var selected_cards_data: Array[Dictionary] = []
-
+	var cards_data: Array[Dictionary] = []
 	for card in selected_cards:
-		selected_cards_data.append(card.to_dict())
-		card.queue_free()
-
+		cards_data.append(card.to_dict())
+		remove_child(card)
+		card.free()
+		
 	selected_cards.clear()
+	cards_played.emit(cards_data)  
 	update_hand_positions()
-
-	cards_played.emit(selected_cards_data)  
 
 
 func add_card(card_data: Dictionary) -> void:

@@ -59,9 +59,9 @@ func to_dict() -> Dictionary:
 	}
 	
 func beats(card: Card) -> bool:
-	if suit < card.suit:
-		return false
 	if value < card.value:
+		return false
+	if suit < card.suit:
 		return false
 	return true
 

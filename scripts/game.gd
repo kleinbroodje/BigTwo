@@ -2,6 +2,7 @@ extends Node
 
 @onready var hand: Hand = get_node("Hand")
 @onready var playing_field: PlayingField = get_node("PlayingField")
+@onready var ui_manager: UIManager = get_node("UIManager")
 
 var last_played_cards: Array[Card] = []
 
@@ -26,6 +27,7 @@ func generate_cards() -> Array[Card]:
 	
 	
 func _on_cards_played(cards_data: Array[Dictionary]) -> void:
+	ui_manager.toggle_play_cards_button()
 	rpc("play_cards", multiplayer.get_unique_id(), cards_data)	
 	
 
@@ -34,7 +36,8 @@ func play_cards(_player_id: int, cards_data: Array[Dictionary]) -> void:
 	var cards: Array[Card] = []
 	for card_data in cards_data:
 		cards.append(Card.from_dict(card_data))
-	
+		
+	last_played_cards = cards
 	playing_field.show_cards(cards)
 
 
@@ -62,3 +65,20 @@ func _on_start_game() -> void:
 			random_card.queue_free()
 
 		rpc_id(peer_id, "deal_cards", hand_cards)
+
+
+func _on_card_selected(cards: Array[Card]) -> void:
+	var is_valid: bool = HandEvaluator.can_play(last_played_cards, cards)
+	print(is_valid)
+	if ui_manager.is_play_cards_button_disabled():
+		if is_valid:
+			ui_manager.toggle_play_cards_button()
+			return
+	else:
+		if cards.is_empty():
+			ui_manager.toggle_play_cards_button()
+			return
+		if !is_valid:
+			ui_manager.toggle_play_cards_button()
+			return
+			

@@ -30,6 +30,7 @@ static func can_play(
 		return false
 	
 	if last_played_cards.is_empty():
+		print(123)
 		return true
 			
 	return beats(curr_cards, curr_cards_type, last_played_cards, last_played_cards_type)
@@ -72,6 +73,7 @@ static func is_full_house(cards: Array[Card]) -> bool:
 static func is_straight(cards: Array[Card]) -> bool:
 	var sorted_cards: Array[Card] = cards.duplicate()
 	sorted_cards.sort_custom(func(a: Card, b: Card) -> bool: return a.value < b.value)
+	var sorted_values := sorted_cards.map(func(c: Card) -> CardDefs.CardValue: return c.value)
 	
 	var unique_straights: Array[Array] = [
 		[
@@ -89,13 +91,13 @@ static func is_straight(cards: Array[Card]) -> bool:
 		CardDefs.CardValue.ACE, CardDefs.CardValue.TWO
 	]
 	
-	if sorted_cards in unique_straights:
+	if sorted_values in unique_straights:
 		return true
-	if sorted_cards == unique_invalid:
+	if sorted_values == unique_invalid:
 		return false
 	
-	for i in range(sorted_cards.size()-1):
-		if sorted_cards[i+1].value-1 != sorted_cards[i].value:
+	for i in range(sorted_values.size()-1):
+		if sorted_values[i+1]-1 != sorted_values[i]:
 			return false
 	return true
 	
@@ -143,9 +145,9 @@ static func get_four_of_a_kind_value(cards: Array[Card]) -> int:
 
 
 static func get_value_counts(cards: Array[Card]) -> Dictionary[CardDefs.CardValue, int]:
-	var counts := {}
+	var counts: Dictionary[CardDefs.CardValue, int] = {}
 	for card in cards:
-		counts[card.value] = counts[card.value] + 1
+		counts[card.value] = counts.get(card.value, 0) + 1
 	return counts
 
 

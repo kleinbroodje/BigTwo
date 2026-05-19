@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://bgimvf0y2mco8" path="res://scripts/playing_field.gd" id="3_lbhrr"]
 [ext_resource type="Script" uid="uid://jkr72dq3jrm1" path="res://scripts/game_ui.gd" id="3_lnu2h"]
 
-[node name="Game" type="Node"]
+[node name="GameManager" type="Node"]
 script = ExtResource("1_yqjtg")
 
 [node name="PlayingField" type="Control" parent="."]
@@ -23,14 +23,14 @@ script = ExtResource("3_lbhrr")
 position = Vector2(640, 600)
 script = ExtResource("1_uwrxv")
 
-[node name="UI" type="Control" parent="."]
+[node name="UIManager" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("3_lnu2h")
 
-[node name="PlayCardsButton" type="Button" parent="UI"]
+[node name="PlayCardsButton" type="Button" parent="UIManager"]
 layout_mode = 0
 offset_left = 590.0
 offset_top = 15.0
@@ -38,7 +38,7 @@ offset_right = 740.0
 offset_bottom = 85.0
 text = "Play Hand"
 
-[node name="VsyncToggle" type="Button" parent="UI"]
+[node name="VsyncToggle" type="Button" parent="UIManager"]
 layout_mode = 0
 offset_left = 760.0
 offset_top = 15.0
@@ -47,5 +47,7 @@ offset_bottom = 85.0
 toggle_mode = true
 text = "Vsync: On"
 
+[connection signal="card_selected" from="Hand" to="." method="_on_card_selected"]
 [connection signal="cards_played" from="Hand" to="." method="_on_cards_played"]
-[connection signal="toggled" from="UI/VsyncToggle" to="UI" method="_on_vsync_toggle_toggled"]
+[connection signal="pressed" from="UIManager/PlayCardsButton" to="Hand" method="_on_play_cards_button_pressed"]
+[connection signal="toggled" from="UIManager/VsyncToggle" to="UIManager" method="_on_vsync_toggle_toggled"]
