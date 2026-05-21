@@ -1,8 +1,11 @@
 extends Node
 
-@onready var hand: Hand = get_node("Hand")
+@onready var player_hand: PlayerHand = get_node("PlayerHand")
 @onready var playing_field: PlayingField = get_node("PlayingField")
 @onready var ui_manager: UIManager = get_node("UIManager")
+@onready var opponents: Node = get_node("Opponents")
+
+var back_card: Texture2D = preload("res://assets/images/cards/back01.png")
 
 var last_played_cards: Array[Card] = []
 
@@ -44,9 +47,17 @@ func play_cards(_player_id: int, cards_data: Array[Dictionary]) -> void:
 @rpc("authority", "call_local")
 func deal_cards(dealt_cards_data: Array[Dictionary]) -> void:
 	for dealt_card_data in dealt_cards_data:
-		hand.add_card(dealt_card_data)
-	hand.update_hand_positions()
-		
+		player_hand.add_card(dealt_card_data)
+	player_hand.update_hand_positions()
+	
+	for opponent in opponents.get_children():
+		var opponent_hand := opponent as Hand
+		for i in range(opponent_hand.max_cards):
+			var card: Sprite2D = Sprite2D.new()
+			card.texture = back_card
+			card.scale = Vector2(0.3, 0.3)
+			opponent_hand.add_child(card)
+		opponent_hand.update_hand_positions()
 		
 func _on_start_game() -> void:
 	var cards := generate_cards()
@@ -59,7 +70,7 @@ func _on_start_game() -> void:
 	for peer_id in all_ids:
 		var hand_cards: Array[Dictionary] = []
 
-		for i in range(hand.MAX_CARDS):
+		for i in range(player_hand.max_cards):
 			var random_card: Card = cards.pop_back()
 			hand_cards.append(random_card.to_dict())
 			random_card.queue_free()
@@ -69,7 +80,6 @@ func _on_start_game() -> void:
 
 func _on_card_selected(cards: Array[Card]) -> void:
 	var is_valid: bool = HandEvaluator.can_play(last_played_cards, cards)
-	print(is_valid)
 	if ui_manager.is_play_cards_button_disabled():
 		if is_valid:
 			ui_manager.toggle_play_cards_button()

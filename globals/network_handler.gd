@@ -27,7 +27,6 @@ func start_client() -> void:
 func _on_peer_connected(_id: int) -> void:
 	if multiplayer.is_server():
 		if multiplayer.get_peers().size() == MAX_CONNECTIONS:
-			print(1)
 			emit_signal("start_game")
 	
 	

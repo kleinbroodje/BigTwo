@@ -30,7 +30,6 @@ static func can_play(
 		return false
 	
 	if last_played_cards.is_empty():
-		print(123)
 		return true
 			
 	return beats(curr_cards, curr_cards_type, last_played_cards, last_played_cards_type)
