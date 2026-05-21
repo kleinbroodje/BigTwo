@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://curpyo4dc6khh"]
+
+[ext_resource type="Script" uid="uid://jemsic6hiu12" path="res://scripts/player_card.gd" id="1_mvbqt"]
+[ext_resource type="PackedScene" uid="uid://dvxugpq83mu5f" path="res://scenes/card.tscn" id="1_psvab"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mvbqt"]
+size = Vector2(142, 205)
+
+[node name="Card" instance=ExtResource("1_psvab")]
+script = ExtResource("1_mvbqt")
+
+[node name="CardArea" type="Area2D" parent="." index="1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CardArea" index="0"]
+position = Vector2(0, 6.5)
+shape = SubResource("RectangleShape2D_mvbqt")
+
+[node name="ClickTimer" type="Timer" parent="." index="2"]
+
+[connection signal="input_event" from="CardArea" to="." method="_on_card_area_input_event"]

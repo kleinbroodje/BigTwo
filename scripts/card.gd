@@ -1,11 +1,9 @@
 extends Node2D
 class_name Card
 
-signal card_dragged
-signal card_released
-
 const CARD_SCENE_PATH := "res://scenes/card.tscn"
 const CARD_SCENE := preload(CARD_SCENE_PATH)
+const BACK_TEXTURE := preload("res://assets/images/cards/back01.png")
 
 const SUIT_NAMES: Array = [
 	"diamonds",
@@ -32,13 +30,10 @@ const VALUE_NAMES: Array = [
 
 @export var value: CardDefs.CardValue
 @export var suit: CardDefs.CardSuit
+@export var face_up: bool = true
 
 @onready var card_image: Sprite2D = get_node("CardImage")
-@onready var click_timer: Timer = get_node("ClickTimer")
 
-var pressed := false
-var dragged := false
-var click_time := 0.1
 var tween_position: Tween
 
 
@@ -79,35 +74,13 @@ static func from_dict(dict: Dictionary) -> Card:
 
 
 func _ready() -> void:
-	card_image.texture = load(
-		"res://assets/images/cards/%s_%s.png"
-		% [SUIT_NAMES[suit], VALUE_NAMES[value]]
-	)
-	click_timer.one_shot = true
-
-
-func _process(_delta: float) -> void:
-	if not dragged and pressed and click_timer.time_left == 0:
-		dragged = true
-		card_dragged.emit(self)
-	elif dragged and not pressed:
-		dragged = false
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.is_released() and pressed:
-		pressed = false
-		card_released.emit(self)
-
-
-func _on_card_area_input_event(
-	_viewport: Node,
-	event: InputEvent,
-	_shape_idx: int,
-) -> void:
-	if event is InputEventMouseButton and event.is_pressed():
-		pressed = true
-		click_timer.start(click_time)
+	if face_up:
+		card_image.texture = load(
+			"res://assets/images/cards/%s_%s.png"
+			% [SUIT_NAMES[suit], VALUE_NAMES[value]]
+		)
+	else: 
+		card_image.texture = BACK_TEXTURE
 
 
 func move(pos: Vector2) -> void:
@@ -122,7 +95,7 @@ func move(pos: Vector2) -> void:
 
 	tween_position.tween_property(
 		self,
-		"global_position",
+		"position",
 		pos,
 		0.5,
 	)

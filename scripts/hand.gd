@@ -20,11 +20,11 @@ func update_hand_positions() -> void:
 	
 	# Calculate x and y pos per card
 	for idx in range(get_child_count()):
-		var current_card: Node2D = get_child(idx)
+		var current_card: Card = get_child(idx)
 
-		var x_pos := global_position.x + (idx - float(get_child_count())
+		var x_pos := (idx - float(get_child_count())
 			/ 2 + 0.5) * final_card_spacing_x
-		var y_pos := global_position.y
+		var y_pos := 0
 		
 		var pos: Vector2 = _pre_card_move(current_card, x_pos, y_pos)
 

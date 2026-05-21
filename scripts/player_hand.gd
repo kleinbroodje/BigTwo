@@ -4,7 +4,7 @@ class_name PlayerHand
 signal cards_played
 signal card_selected
 
-var dragged_card: Card
+var dragged_card: PlayerCard
 var selected_cards: Array[Card] = []
 
 
@@ -40,7 +40,7 @@ func update_dragging() -> void:
 	update_hand_positions()
 
 
-func _on_card_released(card: Card) -> void:
+func _on_card_released(card: PlayerCard) -> void:
 	if card != dragged_card:
 		if card in selected_cards:
 			selected_cards.erase(card)
@@ -53,7 +53,7 @@ func _on_card_released(card: Card) -> void:
 	update_hand_positions()
 
 
-func _on_card_dragged(card: Card) -> void:
+func _on_card_dragged(card: PlayerCard) -> void:
 	dragged_card = card
 
 
@@ -70,7 +70,7 @@ func _on_play_cards_button_pressed() -> void:
 
 
 func add_card(card_data: Dictionary) -> void:
-	var new_card := Card.from_dict(card_data)
+	var new_card := PlayerCard.from_dict(card_data)
 	new_card.connect("card_dragged", _on_card_dragged)
 	new_card.connect("card_released", _on_card_released)
 	add_child(new_card)

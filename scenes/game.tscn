@@ -9,6 +9,34 @@
 [node name="GameManager" type="Node"]
 script = ExtResource("1_yqjtg")
 
+[node name="Opponents" type="Node" parent="."]
+
+[node name="OpponentHand1" type="Node2D" parent="Opponents"]
+position = Vector2(60, 310)
+rotation = 1.5707964
+script = ExtResource("5_iywne")
+max_cards = 13
+card_spacing_x = 20
+hand_width = 500
+metadata/_custom_type_script = "uid://cgvxyrf8kitba"
+
+[node name="OpponentHand2" type="Node2D" parent="Opponents"]
+position = Vector2(640, 60)
+script = ExtResource("5_iywne")
+max_cards = 13
+card_spacing_x = 20
+hand_width = 500
+metadata/_custom_type_script = "uid://cgvxyrf8kitba"
+
+[node name="OpponentHand3" type="Node2D" parent="Opponents"]
+position = Vector2(1220, 310)
+rotation = -1.5707964
+script = ExtResource("5_iywne")
+max_cards = 13
+card_spacing_x = 20
+hand_width = 500
+metadata/_custom_type_script = "uid://cgvxyrf8kitba"
+
 [node name="PlayingField" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 8
@@ -43,6 +71,7 @@ offset_bottom = 491.0
 text = "Play Hand"
 
 [node name="VsyncToggle" type="Button" parent="UIManager"]
+visible = false
 layout_mode = 0
 offset_left = 1112.0
 offset_top = 14.0
@@ -50,28 +79,6 @@ offset_right = 1262.0
 offset_bottom = 84.0
 toggle_mode = true
 text = "Vsync: On"
-
-[node name="Opponents" type="Node" parent="."]
-
-[node name="OpponentHand1" type="Node2D" parent="Opponents"]
-position = Vector2(60, 360)
-script = ExtResource("5_iywne")
-max_cards = 13
-metadata/_custom_type_script = "uid://cgvxyrf8kitba"
-
-[node name="OpponentHand2" type="Node2D" parent="Opponents"]
-position = Vector2(640, 60)
-script = ExtResource("5_iywne")
-max_cards = 13
-metadata/_custom_type_script = "uid://cgvxyrf8kitba"
-
-[node name="OpponentHand3" type="Node2D" parent="Opponents"]
-position = Vector2(1220, 360)
-script = ExtResource("5_iywne")
-max_cards = 13
-card_spacing_x = 120
-hand_width = 1200
-metadata/_custom_type_script = "uid://cgvxyrf8kitba"
 
 [connection signal="card_selected" from="PlayerHand" to="." method="_on_card_selected"]
 [connection signal="cards_played" from="PlayerHand" to="." method="_on_cards_played"]

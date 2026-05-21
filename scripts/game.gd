@@ -5,8 +5,6 @@ extends Node
 @onready var ui_manager: UIManager = get_node("UIManager")
 @onready var opponents: Node = get_node("Opponents")
 
-var back_card: Texture2D = preload("res://assets/images/cards/back01.png")
-
 var last_played_cards: Array[Card] = []
 
 func _ready() -> void:
@@ -53,9 +51,9 @@ func deal_cards(dealt_cards_data: Array[Dictionary]) -> void:
 	for opponent in opponents.get_children():
 		var opponent_hand := opponent as Hand
 		for i in range(opponent_hand.max_cards):
-			var card: Sprite2D = Sprite2D.new()
-			card.texture = back_card
-			card.scale = Vector2(0.3, 0.3)
+			var card: Card = Card.new_card(CardDefs.CardValue.THREE, CardDefs.CardSuit.DIAMONDS)
+			card.face_up = false
+			card.scale = Vector2(0.5, 0.5)
 			opponent_hand.add_child(card)
 		opponent_hand.update_hand_positions()
 		
